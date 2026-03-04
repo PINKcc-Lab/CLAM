@@ -93,13 +93,13 @@ if __name__ == '__main__':
         else:
             print ('\n'+key + " : " + str(value))
             
-    decision = input('Continue? Y/N ')
-    if decision in ['Y', 'y', 'Yes', 'yes']:
-        pass
-    elif decision in ['N', 'n', 'No', 'NO']:
-        exit()
-    else:
-        raise NotImplementedError
+    # decision = input('Continue? Y/N ')
+    # if decision in ['Y', 'y', 'Yes', 'yes']:
+    #     pass
+    # elif decision in ['N', 'n', 'No', 'NO']:
+    #     exit()
+    # else:
+    #     raise NotImplementedError
 
     args = config_dict
     patch_args = argparse.Namespace(**args['patching_arguments'])
@@ -184,7 +184,7 @@ if __name__ == '__main__':
     blocky_wsi_kwargs = {'top_left': None, 'bot_right': None, 'patch_size': patch_size, 'step_size': patch_size, 
     'custom_downsample':patch_args.custom_downsample, 'level': patch_args.patch_level, 'use_center_shift': heatmap_args.use_center_shift}
 
-    for i in tqdm(range(len(process_stack))):
+    for i in tqdm(range(len(process_stack)), desc="Processing slides", mininterval=120):
         slide_name = process_stack.loc[i, 'slide_id']
         if data_args.slide_ext not in slide_name:
             slide_name+=data_args.slide_ext
@@ -320,9 +320,9 @@ if __name__ == '__main__':
 
         os.makedirs('heatmaps/results/', exist_ok=True)
         if data_args.process_list is not None:
-            process_stack.to_csv('heatmaps/results/{}.csv'.format(data_args.process_list.replace('.csv', '')), index=False)
+            process_stack.to_csv('heatmaps/results/{}.csv'.format(os.path.basename(data_args.process_list).replace('.csv', '')), index=False)
         else:
-            process_stack.to_csv('heatmaps/results/{}.csv'.format(exp_args.save_exp_code), index=False)
+            process_stack.to_csv('heatmaps/results/{}.csv'.format(os.path.basename(exp_args.save_exp_code)), index=False)
         
         file = h5py.File(block_map_save_path, 'r')
         dset = file['attention_scores']

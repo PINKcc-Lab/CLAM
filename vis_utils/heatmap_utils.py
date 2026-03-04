@@ -60,7 +60,7 @@ def compute_from_patches(wsi_object, img_transforms, feature_extractor=None, cla
     num_batches = len(roi_loader)
     print('number of batches: ', num_batches)
     mode = "w"
-    for idx, (roi, coords) in enumerate(tqdm(roi_loader)):
+    for idx, (roi, coords) in enumerate(tqdm(roi_loader), desc="Processing patches", mininterval=120):
         roi = roi.to(device)
         coords = coords.numpy()
         
